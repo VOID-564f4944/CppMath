@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="MathVector/MathVector.vcxproj" Id="45c6ef59-cae5-4381-9803-77f998dca50f" />
+</Solution>
