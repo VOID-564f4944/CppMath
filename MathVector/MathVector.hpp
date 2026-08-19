@@ -57,12 +57,12 @@ namespace Math {
 		{}
 
 	public:
-		constexpr ValueType& operator [] (SizeType index)
+		[[nodiscard]] constexpr ValueType& operator [] (SizeType index)
 		{
 			return this->data_[index];
 		}
 
-		constexpr const ValueType& operator [] (SizeType index) const
+		[[nodiscard]] constexpr const ValueType& operator [] (SizeType index) const
 		{
 			return this->data_[index];
 		}
@@ -111,7 +111,7 @@ namespace Math {
 			return *this;
 		}
 
-		constexpr bool operator == (const Vec& other) const noexcept
+		[[nodiscard]] constexpr bool operator == (const Vec& other) const noexcept
 		{
 			return this->data_ == other.data_;
 		}
@@ -121,7 +121,7 @@ namespace Math {
 	};
 
 	template <RealNumber T, std::size_t N, typename P>
-	constexpr Vec<T, N, P> operator + (Vec<T, N, P> lhs, const Vec<T, N, P>& rhs) noexcept
+	[[nodiscard]] constexpr Vec<T, N, P> operator + (Vec<T, N, P> lhs, const Vec<T, N, P>& rhs) noexcept
 	{
 		lhs += rhs;
 
@@ -129,7 +129,7 @@ namespace Math {
 	}
 
 	template <RealNumber T, std::size_t N, typename P>
-	constexpr Vec<T, N, P> operator - (Vec<T, N, P> lhs, const Vec<T, N, P>& rhs) noexcept
+	[[nodiscard]] constexpr Vec<T, N, P> operator - (Vec<T, N, P> lhs, const Vec<T, N, P>& rhs) noexcept
 	{
 		lhs -= rhs;
 
@@ -137,7 +137,7 @@ namespace Math {
 	}
 
 	template <RealNumber T, std::size_t N, typename P>
-	constexpr Vec<T, N, P> operator - (const Vec<T, N, P>& vec) noexcept
+	[[nodiscard]] constexpr Vec<T, N, P> operator - (const Vec<T, N, P>& vec) noexcept
 	{
 		Vec<T, N, P> temp{};
 
@@ -147,7 +147,7 @@ namespace Math {
 	}
 
 	template <RealNumber T, std::size_t N, typename P>
-	constexpr Vec<T, N, P> operator * (Vec<T, N, P> vec, T num)
+	[[nodiscard]] constexpr Vec<T, N, P> operator * (Vec<T, N, P> vec, T num)
 	{
 		vec *= num;
 
@@ -155,7 +155,7 @@ namespace Math {
 	}
 
 	template <RealNumber T, std::size_t N, typename P>
-	constexpr Vec<T, N, P> operator * (T num, Vec<T, N, P> vec)
+	[[nodiscard]] constexpr Vec<T, N, P> operator * (T num, Vec<T, N, P> vec)
 	{
 		vec *= num;
 
@@ -163,7 +163,7 @@ namespace Math {
 	}
 
 	template <RealNumber T, std::size_t N, typename P>
-	constexpr Vec<T, N, P> operator / (Vec<T, N, P> vec, T num)
+	[[nodiscard]] constexpr Vec<T, N, P> operator / (Vec<T, N, P> vec, T num)
 	{
 		vec /= num;
 
