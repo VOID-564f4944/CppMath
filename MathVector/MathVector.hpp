@@ -17,28 +17,7 @@ namespace Math {
 		!std::same_as<T, char> &&
 		!std::same_as<T, wchar_t>;
 
-	struct GamePolicy
-	{
-		template <typename T>
-		static void DivisionByZero(T denominator)
-		{
-			assert(denominator != T{});
-		}
-	};
-
-	struct PrecisionPolicy
-	{
-		template <typename T>
-		static void DivisionByZero(T denominator)
-		{
-			if (denominator == T{})
-			{
-				throw std::domain_error("Division by zero.");
-			}
-		}
-	};
-
-	template<RealNumber Type, std::size_t N, typename Policy = GamePolicy>
+	template<RealNumber Type, std::size_t N>
 	class Vec
 	{
 	public:
@@ -62,66 +41,66 @@ namespace Math {
 			return this->data_[index];
 		}
 
-		[[nodiscard]] constexpr const ValueType& get(SizeType index) const
+		[[nodiscard]] constexpr const ValueType& get(SizeType index) const noexcept
 		{
 			return this->data_[index];
 		}
 
-		[[nodiscard]] constexpr ValueType& x()
+		[[nodiscard]] constexpr ValueType& x() noexcept
 			requires (N > 0)
 		{
 			return this->data_[0];
 		}
 
-		[[nodiscard]] constexpr ValueType& y()
+		[[nodiscard]] constexpr ValueType& y() noexcept
 			requires (N > 1)
 		{
 			return this->data_[1];
 		}
 
-		[[nodiscard]] constexpr ValueType& z()
+		[[nodiscard]] constexpr ValueType& z() noexcept
 			requires (N > 2)
 		{
 			return this->data_[2];
 		}
 
-		[[nodiscard]] constexpr ValueType& w()
+		[[nodiscard]] constexpr ValueType& w() noexcept
 			requires (N > 3)
 		{
 			return this->data_[3];
 		}
 
-		[[nodiscard]] constexpr const ValueType& x() const
+		[[nodiscard]] constexpr const ValueType& x() const noexcept
 			requires (N > 0)
 		{
 			return this->data_[0];
 		}
 
-		[[nodiscard]] constexpr const ValueType& y() const
+		[[nodiscard]] constexpr const ValueType& y() const noexcept
 			requires (N > 1)
 		{
 			return this->data_[1];
 		}
 
-		[[nodiscard]] constexpr const ValueType& z() const
+		[[nodiscard]] constexpr const ValueType& z() const noexcept
 			requires (N > 2)
 		{
 			return this->data_[2];
 		}
 
-		[[nodiscard]] constexpr const ValueType& w() const
+		[[nodiscard]] constexpr const ValueType& w() const noexcept
 			requires (N > 3)
 		{
 			return this->data_[3];
 		}
 
 	public:
-		[[nodiscard]] constexpr ValueType& operator [] (SizeType index)
+		[[nodiscard]] constexpr ValueType& operator [] (SizeType index) noexcept
 		{
 			return this->data_[index];
 		}
 
-		[[nodiscard]] constexpr const ValueType& operator [] (SizeType index) const
+		[[nodiscard]] constexpr const ValueType& operator [] (SizeType index) const noexcept
 		{
 			return this->data_[index];
 		}
@@ -146,7 +125,6 @@ namespace Math {
 			return *this;
 		}
 
-		/* TODO: overflow/underflow*/
 		template <RealNumber Num>
 		constexpr Vec& operator *= (Num num)
 		{
@@ -161,8 +139,6 @@ namespace Math {
 		template <RealNumber Num>
 		constexpr Vec& operator /= (Num num)
 		{
-			Policy::DivisionByZero(num);
-
 			for (SizeType index{}; index < N; ++index)
 			{
 				this->data_[index] /= num;
@@ -177,27 +153,30 @@ namespace Math {
 		}
 
 	private:
+
+
+	private:
 		std::array<ValueType, N> data_{};
 	};
 
-	template <RealNumber T, std::size_t N, typename P>
-	[[nodiscard]] constexpr Vec<T, N, P> operator + (Vec<T, N, P> lhs, const Vec<T, N, P>& rhs) noexcept
+	template <RealNumber T, std::size_t N>
+	[[nodiscard]] constexpr Vec<T, N> operator + (Vec<T, N> lhs, const Vec<T, N>& rhs) noexcept
 	{
 		lhs += rhs;
 
 		return lhs;
 	}
 
-	template <RealNumber T, std::size_t N, typename P>
-	[[nodiscard]] constexpr Vec<T, N, P> operator - (Vec<T, N, P> lhs, const Vec<T, N, P>& rhs) noexcept
+	template <RealNumber T, std::size_t N>
+	[[nodiscard]] constexpr Vec<T, N> operator - (Vec<T, N> lhs, const Vec<T, N>& rhs) noexcept
 	{
 		lhs -= rhs;
 
 		return lhs;
 	}
 
-	template <RealNumber T, std::size_t N, typename P>
-	[[nodiscard]] constexpr Vec<T, N, P> operator - (const Vec<T, N, P>& vec) noexcept
+	template <RealNumber T, std::size_t N>
+	[[nodiscard]] constexpr Vec<T, N> operator - (const Vec<T, N>& vec) noexcept
 	{
 		Vec<T, N, P> temp{};
 
@@ -206,32 +185,32 @@ namespace Math {
 		return temp;
 	}
 
-	template <RealNumber T, std::size_t N, typename P, RealNumber Num>
-	[[nodiscard]] constexpr Vec<T, N, P> operator * (Vec<T, N, P> vec, Num num)
+	template <RealNumber T, std::size_t N, RealNumber Num>
+	[[nodiscard]] constexpr Vec<T, N> operator * (Vec<T, N> vec, Num num)
 	{
 		vec *= num;
 
 		return vec;
 	}
 
-	template <RealNumber T, std::size_t N, typename P, RealNumber Num>
-	[[nodiscard]] constexpr Vec<T, N, P> operator * (Num num, Vec<T, N, P> vec)
+	template <RealNumber T, std::size_t N, RealNumber Num>
+	[[nodiscard]] constexpr Vec<T, N> operator * (Num num, Vec<T, N> vec)
 	{
 		vec *= num;
 
 		return vec;
 	}
 
-	template <RealNumber T, std::size_t N, typename P, RealNumber Num>
-	[[nodiscard]] constexpr Vec<T, N, P> operator / (Vec<T, N, P> vec, Num num)
+	template <RealNumber T, std::size_t N, RealNumber Num>
+	[[nodiscard]] constexpr Vec<T, N> operator / (Vec<T, N> vec, Num num)
 	{
 		vec /= num;
 
 		return vec;
 	}
 
-	template <RealNumber T, std::size_t N, typename Policy>
-	std::ostream& operator << (std::ostream& os, const Vec<T, N, Policy>& vec)
+	template <RealNumber T, std::size_t N>
+	std::ostream& operator << (std::ostream& os, const Vec<T, N>& vec)
 	{
 		os << "[";
 
