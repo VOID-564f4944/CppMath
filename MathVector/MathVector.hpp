@@ -51,10 +51,69 @@ namespace Math {
 		{}
 
 		template <typename... Args>
-		requires (sizeof...(Args) == N && (std::same_as<std::remove_cvref_t<Args>, ValueType> && ...))
+			requires (sizeof...(Args) == N && (std::same_as<std::remove_cvref_t<Args>, ValueType> && ...))
 		constexpr Vec(Args&&... args) noexcept
 			: data_{std::forward<Args>(args)...}
 		{}
+
+	public:
+		[[nodiscard]] constexpr ValueType& get(SizeType index) noexcept
+		{
+			return this->data_[index];
+		}
+
+		[[nodiscard]] constexpr const ValueType& get(SizeType index) const
+		{
+			return this->data_[index];
+		}
+
+		[[nodiscard]] constexpr ValueType& x()
+			requires (N > 0)
+		{
+			return this->data_[0];
+		}
+
+		[[nodiscard]] constexpr ValueType& y()
+			requires (N > 1)
+		{
+			return this->data_[1];
+		}
+
+		[[nodiscard]] constexpr ValueType& z()
+			requires (N > 2)
+		{
+			return this->data_[2];
+		}
+
+		[[nodiscard]] constexpr ValueType& w()
+			requires (N > 3)
+		{
+			return this->data_[3];
+		}
+
+		[[nodiscard]] constexpr const ValueType& x() const
+			requires (N > 0)
+		{
+			return this->data_[0];
+		}
+
+		[[nodiscard]] constexpr const ValueType& y() const
+			requires (N > 1)
+		{
+			return this->data_[1];
+		}
+
+		[[nodiscard]] constexpr const ValueType& z() const
+			requires (N > 2)
+		{
+			return this->data_[2];
+		}
+
+		[[nodiscard]] constexpr const ValueType& w() const
+			requires (N > 3)
+		{
+			return this->data_[3];
+		}
 
 	public:
 		[[nodiscard]] constexpr ValueType& operator [] (SizeType index)
@@ -87,6 +146,7 @@ namespace Math {
 			return *this;
 		}
 
+		/* TODO: overflow/underflow*/
 		template <RealNumber Num>
 		constexpr Vec& operator *= (Num num)
 		{
@@ -146,24 +206,24 @@ namespace Math {
 		return temp;
 	}
 
-	template <RealNumber T, std::size_t N, typename P>
-	[[nodiscard]] constexpr Vec<T, N, P> operator * (Vec<T, N, P> vec, T num)
+	template <RealNumber T, std::size_t N, typename P, RealNumber Num>
+	[[nodiscard]] constexpr Vec<T, N, P> operator * (Vec<T, N, P> vec, Num num)
 	{
 		vec *= num;
 
 		return vec;
 	}
 
-	template <RealNumber T, std::size_t N, typename P>
-	[[nodiscard]] constexpr Vec<T, N, P> operator * (T num, Vec<T, N, P> vec)
+	template <RealNumber T, std::size_t N, typename P, RealNumber Num>
+	[[nodiscard]] constexpr Vec<T, N, P> operator * (Num num, Vec<T, N, P> vec)
 	{
 		vec *= num;
 
 		return vec;
 	}
 
-	template <RealNumber T, std::size_t N, typename P>
-	[[nodiscard]] constexpr Vec<T, N, P> operator / (Vec<T, N, P> vec, T num)
+	template <RealNumber T, std::size_t N, typename P, RealNumber Num>
+	[[nodiscard]] constexpr Vec<T, N, P> operator / (Vec<T, N, P> vec, Num num)
 	{
 		vec /= num;
 
